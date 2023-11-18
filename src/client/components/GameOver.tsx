@@ -1,11 +1,7 @@
-interface AnswerProps {
-  answer: number[];
-}
-
-const Answer = ({ answer }: AnswerProps) => {
+const Answer = () => {
   return (
     <>
-      <>Answer: {answer}</>
+      <>Answer</>
     </>
   );
 };

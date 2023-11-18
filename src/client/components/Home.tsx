@@ -10,6 +10,9 @@ const Home = () => {
       <Button variant="plain" onClick={() => navigate('/create-account')} color="primary">
         Create Account
       </Button>
+      <Button variant="plain" onClick={() => navigate('/signin')} color="primary">
+        Sign in
+      </Button>
       <Logo />
       <Button variant="plain" onClick={() => navigate(`/game`)} color="primary">
         Play
@@ -19,9 +22,6 @@ const Home = () => {
       </Button>
       <Button variant="plain" onClick={() => navigate('/settings')} color="primary">
         Settings
-      </Button>
-      <Button variant="plain" onClick={() => navigate('/signin')} color="primary">
-        Sign in
       </Button>
     </>
   );

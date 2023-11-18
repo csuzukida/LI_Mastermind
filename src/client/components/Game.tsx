@@ -1,26 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/joy';
 import { Logo, VerificationForm } from '../components';
+import { GameContext } from '../contexts';
 
-interface GameProps {
-  difficultyLevel: number;
-  answer: number[];
-  setAnswer: (answer: number[]) => void;
-}
-
-const Game = ({ difficultyLevel, answer, setAnswer }: GameProps) => {
+const Game = () => {
   const [guess, setGuess] = useState('');
   const [error, setError] = useState('');
   const [guessCount, setGuessCount] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [almostCorrectCount, setAlmostCorrectCount] = useState(0);
-  const [showSolution, setShowSolution] = useState(false);
+
+  const { numDigits: difficultyLevel, maxGuesses, answer, setAnswer } = useContext(GameContext);
 
   const navigate = useNavigate();
 
-  const MAX_GUESSES = 10;
-
+  // fetch random numbers from server
   useEffect(() => {
     const getRandomNumbers = async () => {
       try {
@@ -34,13 +29,15 @@ const Game = ({ difficultyLevel, answer, setAnswer }: GameProps) => {
     getRandomNumbers();
   }, [difficultyLevel, setAnswer]);
 
+  // helper function to compare user guess to answer
   const compareGuess = (userGuess: string) => {
-    if (userGuess !== answer.join('') || MAX_GUESSES === guessCount) {
+    setGuessCount(guessCount + 1);
+
+    if (userGuess === answer.join('') || maxGuesses === guessCount) {
       navigate('/game-over');
     }
 
-    setGuessCount(guessCount + 1);
-
+    // map user guess to array of numbers
     const userGuessArray = userGuess.split('').map(Number);
     let localCorrectCount = 0;
     let localAlmostCorrectCount = 0;
@@ -73,7 +70,6 @@ const Game = ({ difficultyLevel, answer, setAnswer }: GameProps) => {
         <VerificationForm
           title="Enter your guess!"
           length={difficultyLevel}
-          // answer={answer.map((num) => num.toString())}
           onFormSubmit={handleSubmit}
         />
         {error && <p className="error">{error}</p>}
