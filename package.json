@@ -1,0 +1,19 @@
+{
+  "name": "li_mastermind",
+  "version": "1.0.0",
+  "description": "Coding Challenge for LinkedIn Reach",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csuzukida/LI_Mastermind.git"
+  },
+  "author": "Chris Suzukida",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/csuzukida/LI_Mastermind/issues"
+  },
+  "homepage": "https://github.com/csuzukida/LI_Mastermind#readme"
+}
