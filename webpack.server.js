@@ -1,7 +1,8 @@
-const commonConfig = require('./webpack.common');
 const path = require('path');
-const nodeExternals = require('webpack-node-externals');
 const { merge } = require('webpack-merge');
+const nodeExternals = require('webpack-node-externals');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const commonConfig = require('./webpack.common.js');
 
 module.exports = (env, argv) => {
   const IS_DEVELOPMENT = argv.mode === 'development';
@@ -16,6 +17,30 @@ module.exports = (env, argv) => {
       clean: true,
     },
     externals: [nodeExternals()],
+    module: {
+      rules: [
+        {
+          test: /\.ts$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'ts-loader',
+              options: {
+                transpileOnly: true,
+                configFile: 'tsconfig.server.json',
+              },
+            },
+          ],
+        },
+      ],
+    },
+    plugins: [
+      new ForkTsCheckerWebpackPlugin({
+        typescript: {
+          configFile: path.resolve(__dirname, 'tsconfig.server.json'),
+        },
+      }),
+    ],
     optimization: {
       minimize: false,
     },
