@@ -5,10 +5,10 @@ const apiRouter = express.Router();
 
 // data
 apiRouter.get(
-  '/random-numbers/:difficulty',
+  '/random-numbers/',
   dataController.getRandomNumbers,
   (req: Request, res: Response) => {
-    res.status(200).json(res.locals.randomNumbers);
+    res.status(200).json(res.locals.randomNumbersArray);
   }
 );
 
