@@ -4,7 +4,8 @@ import { Request, Response, NextFunction } from 'express';
 const dataController = {
   getRandomNumbers: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { difficulty } = req.params;
+      const { difficulty } = req.query;
+      console.log('difficulty', difficulty);
       const response = await axios.get(
         `https://www.random.org/integers/?num=${difficulty}&min=0&max=9&col=${difficulty}&base=10&format=plain&rnd=new`
       );
