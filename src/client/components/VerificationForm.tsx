@@ -1,4 +1,4 @@
-import { FC, useRef, KeyboardEvent, useState, FormEvent, FocusEvent, useCallback } from 'react';
+import { useRef, KeyboardEvent, useState, FormEvent, FocusEvent, useCallback } from 'react';
 import { Box, Input, Stack, Typography, styled } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
@@ -23,12 +23,13 @@ interface VerificationFormProps {
   onFormSubmit: (userInput: string[]) => void;
 }
 
-const VerificationForm: FC<VerificationFormProps> = ({ title, length, onFormSubmit }) => {
+const VerificationForm = ({ title, length, onFormSubmit }: VerificationFormProps) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isValid, setIsValid] = useState(true);
   const [code, setCode] = useState<string[]>(Array(length).fill(''));
 
   const formRef = useRef<HTMLFormElement>(null);
+
   const update = useCallback((index: number, val: string) => {
     return setCode((prevState) => {
       const slice = prevState.slice();
@@ -40,12 +41,12 @@ const VerificationForm: FC<VerificationFormProps> = ({ title, length, onFormSubm
   function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
     const index = parseInt(e.currentTarget.dataset.index as string);
     const form = formRef.current;
+
     if (isNaN(index) || form === null) return;
 
-    const prevIndex = index - 1;
-    const nextIndex = index + 1;
-    const prevInput: InputOrNull = form.querySelector(`.input-${prevIndex}`);
-    const nextInput: InputOrNull = form.querySelector(`.input-${nextIndex}`);
+    const prevInput: InputOrNull = form.querySelector(`.input-${index - 1}`);
+    const nextInput: InputOrNull = form.querySelector(`.input-${index + 1}`);
+
     switch (e.key) {
       case 'Backspace':
         if (code[index]) update(index, '');
