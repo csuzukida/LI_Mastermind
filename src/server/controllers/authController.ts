@@ -39,14 +39,32 @@ const authController = {
     });
   },
 
-  checkRole: (roles: string[]) => (req: Request, res: Response, next: NextFunction) => {
-    const { role } = res.locals.role;
+  checkRole: (roles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // grab the user id from the session
+      const { userId } = req.session as ISession;
 
-    if (roles.includes(role)) {
+      // double check that the user is logged in
+      if (!userId) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      // check if user is in the database
+      const user = await UserModel.findById(userId);
+      if (!user) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      console.log('user.role', user.role);
+      console.log('roles', roles);
+      if (!roles.includes(user.role)) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+
       return next();
+    } catch (error) {
+      return next(error);
     }
-
-    return res.status(403).json({ message: 'Access denied' });
   },
 };
 

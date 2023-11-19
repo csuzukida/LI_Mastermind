@@ -18,6 +18,7 @@ userRouter.post('/logout', authController.logoutUser);
 userRouter.get(
   '/all-users',
   authController.isAuthenticated,
+  authController.checkRole(['admin']),
   userController.getAllUsers,
   (req: Request, res: Response) => {
     res.status(200).json(res.locals.users);
