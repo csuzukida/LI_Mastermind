@@ -8,16 +8,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "moduleResolution": "node",
-    "baseUrl": ".",
-    "paths": {
-      "*": [
-        "node_modules/*",
-        "src/types/*"
-      ]
-    }
   },
   "include": [
-    "src/server/**/*.ts"
+    "src/server/**/*.ts",
   ],
   "exclude": [
     "node_modules",
