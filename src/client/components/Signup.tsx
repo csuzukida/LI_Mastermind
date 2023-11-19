@@ -5,49 +5,41 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Input, FormControl, FormHelperText } from '@mui/joy';
 import { Box } from '@mui/material';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Logo } from '../components';
+import { Logo } from '.';
 
-// TODO: Add forgot password link
-
-const SigninInput = z.object({
+const SignupInput = z.object({
   email: z.string().email(),
   password: z.string().min(8, { message: 'Password must be at least 8 characters long' }),
 });
 
-type SigninInput = z.infer<typeof SigninInput>;
+type SignupInput = z.infer<typeof SignupInput>;
 
-const Signin = () => {
+const Signup = () => {
   const {
     control,
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<SigninInput>({
-    resolver: zodResolver(SigninInput),
+  } = useForm<SignupInput>({
+    resolver: zodResolver(SignupInput),
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
-  const onSubmit: SubmitHandler<SigninInput> = async (formData) => {
+  const onSubmit: SubmitHandler<SignupInput> = async (formData) => {
     try {
-      await axios.post('/api/users/login', formData);
+      await axios.post('/api/users/signup', formData);
       // TODO: Stylize this alert or replace it with a toast
-      alert('Sign in successful! Navigating back to the home page.');
+      alert('Signup successful! Navigating back to the home page.');
       navigate('/');
     } catch (error) {
       console.error(error);
-      if (axios.isAxiosError(error) && error.response && error.response.status === 401) {
-        setError('password', {
-          type: 'manual',
-          message: 'Email not found or password is incorrect',
-        });
-      }
       if (axios.isAxiosError(error) && error.response && error.response.status === 404) {
         setError('password', {
           type: 'manual',
-          message: 'Email not found or password is incorrect',
+          message: 'Something went wrong, please try again later',
         });
       }
     }
@@ -85,7 +77,7 @@ const Signin = () => {
             </FormControl>
           </Box>
           <Button sx={{ marginLeft: '1rem', width: '40%' }} onClick={handleSubmit(onSubmit)}>
-            Sign in
+            Sign up
           </Button>
         </form>
       </Box>
@@ -93,4 +85,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Signup;

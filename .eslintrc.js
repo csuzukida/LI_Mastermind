@@ -4,7 +4,7 @@ module.exports = {
     node: true,
     es6: true,
   },
-  parserOptions: { ecmaVersion: 8, sourceType: 'module' },
+  parserOptions: { ecmaVersion: 2020, sourceType: 'module' },
   ignorePatterns: ['node_modules/*'],
   extends: ['eslint:recommended'],
   overrides: [
@@ -14,6 +14,9 @@ module.exports = {
       settings: {
         react: { version: 'detect' },
         'import/resolver': {
+          node: {
+            extensions: ['.js', '.jsx', '.ts', '.tsx', '.css'],
+          },
           typescript: {},
         },
       },
@@ -45,14 +48,6 @@ module.exports = {
         'linebreak-style': ['error', 'unix'],
         'react/prop-types': 'off',
 
-        'import/order': [
-          'error',
-          {
-            groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'object'],
-            'newlines-between': 'always',
-            alphabetize: { order: 'asc', caseInsensitive: true },
-          },
-        ],
         'import/default': 'off',
         'import/no-named-as-default-member': 'off',
         'import/no-named-as-default': 'off',

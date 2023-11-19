@@ -1,8 +1,9 @@
 const path = require('path');
-const htmlWebpackPlugin = require('html-webpack-plugin');
-const miniCssExtractPlugin = require('mini-css-extract-plugin');
 const { merge } = require('webpack-merge');
-const commonConfig = require('./webpack.common');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // new
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const commonConfig = require('./webpack.common.js');
 
 module.exports = (env, argv) => {
   const IS_DEVELOPMENT = argv.mode === 'development';
@@ -14,7 +15,7 @@ module.exports = (env, argv) => {
         directory: path.resolve(__dirname, 'dist/client'),
       },
       proxy: {
-        '/api/**': 'http://localhost:3000',
+        '/api': 'http://localhost:3000',
       },
     },
     devtool: IS_DEVELOPMENT ? 'inline-source-map' : false,
@@ -28,18 +29,36 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
+          test: /\.tsx?$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: 'ts-loader',
+              options: {
+                transpileOnly: true,
+                configFile: 'tsconfig.client.json',
+              },
+            },
+          ],
+        },
+        {
           test: /\.css$/,
-          exlude: /node_modules/,
-          use: [IS_DEVELOPMENT ? 'style-loader' : miniCssExtractPlugin.loader, 'css-loader'],
+          exclude: /node_modules/,
+          use: [IS_DEVELOPMENT ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader'],
         },
       ],
     },
     plugins: [
-      new htmlWebpackPlugin({
+      new HtmlWebpackPlugin({
         template: 'src/client/index.html',
       }),
-      new miniCssExtractPlugin({
+      new MiniCssExtractPlugin({
         filename: '[name].[contenthash].css',
+      }),
+      new ForkTsCheckerWebpackPlugin({
+        typescript: {
+          configFile: path.resolve(__dirname, 'tsconfig.client.json'),
+        },
       }),
     ],
   };
