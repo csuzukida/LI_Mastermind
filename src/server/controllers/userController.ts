@@ -8,7 +8,11 @@ const userController = {
       const { email, password } = req.body;
       const hashedPassword = await argon2.hash(password);
 
-      console.log('Creating user with data:', { email, password: hashedPassword });
+      // catch missing fields in the request body
+      if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password are required' });
+      }
+
       await UserModel.create({ email, password: hashedPassword });
 
       return next();
@@ -20,6 +24,11 @@ const userController = {
   getUser: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
+      // catch missing id in the request params
+      if (!id) {
+        return res.status(400).json({ message: 'Missing id or malformed request' });
+      }
+
       const user = await UserModel.findById(id);
 
       res.locals.user = user;
@@ -45,6 +54,9 @@ const userController = {
   deleteUser: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
+      if (!id) {
+        return res.status(400).json({ message: 'Missing id or malformed request' });
+      }
 
       await UserModel.findByIdAndDelete(id);
 
