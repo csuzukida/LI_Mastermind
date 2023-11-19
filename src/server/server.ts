@@ -5,17 +5,40 @@ import express, { Express, Request, Response } from 'express';
 import path from 'path';
 import http from 'http';
 import util from 'util';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
 import apiRoutes from './routes/apiRoutes';
 import CustomError from '../utils/CustomError';
 
 const app: Express = express();
 const MODE = process.env.NODE_ENV || 'development';
 const PORT = 3000;
+const SESSION_SECRET = process.env.SESSION_SECRET || '';
 
 console.log(`Running in ${MODE} mode`);
 const server = http.createServer(app).listen(PORT, () => {
   console.log(`⚡️: Server is running at http://localhost:${PORT}`);
 });
+
+// middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    cookie: {
+      httpOnly: true,
+      secure: MODE === 'production',
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  })
+);
+
+// api routes
+app.use('/api', apiRoutes);
 
 // check for prod and serve static assets and index.html
 if (MODE === 'production') {
@@ -24,13 +47,6 @@ if (MODE === 'production') {
     res.sendFile(path.join(__dirname, '../../dist/client/index.html'));
   });
 }
-
-// middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// api routes
-app.use('/api', apiRoutes);
 
 // global error handler
 app.use((err: Error, req: Request, res: Response) => {

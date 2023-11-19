@@ -22,6 +22,8 @@ const Game = () => {
       try {
         const response = await fetch(`/api/random-numbers/?difficulty=${numDigits}`);
         const randomNumbers = await response.json();
+
+        console.log('randomNumbers', randomNumbers);
         setAnswer(randomNumbers);
       } catch (error) {
         console.error('Something went wrong, please try again later!');

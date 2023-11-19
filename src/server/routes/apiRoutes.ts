@@ -1,9 +1,10 @@
 import express, { Request, Response } from 'express';
 import { dataController } from '../controllers';
+import { userRouter } from '../routes';
 
 const apiRouter = express.Router();
 
-// data
+// data routes
 apiRouter.get(
   '/random-numbers/',
   dataController.getRandomNumbers,
@@ -12,8 +13,8 @@ apiRouter.get(
   }
 );
 
-// users
-// TODO: implement user controller and user routes
+// user routes
+apiRouter.use('/users', userRouter);
 
 // 404 for /api endpoints
 apiRouter.use('*', (req: Request, res: Response) => {
