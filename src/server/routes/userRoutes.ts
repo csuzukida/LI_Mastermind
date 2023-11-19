@@ -4,19 +4,19 @@ import { authController, userController } from '../controllers';
 const userRouter = express.Router();
 
 // create user
-userRouter.post('/users', userController.createUser, (req: Request, res: Response) => {
+userRouter.post('/signup', userController.createUser, (req: Request, res: Response) => {
   res.sendStatus(201);
 });
 
 // login user
-userRouter.post('/users/login', authController.loginUser);
+userRouter.post('/login', authController.loginUser);
 
 // logout user
-userRouter.post('/users/logout', authController.logoutUser);
+userRouter.post('/logout', authController.logoutUser);
 
 // get all users
 userRouter.get(
-  '/users/all-users',
+  '/all-users',
   authController.isAuthenticated,
   userController.getAllUsers,
   (req: Request, res: Response) => {
@@ -26,7 +26,7 @@ userRouter.get(
 
 // get a specific user by id
 userRouter.get(
-  '/users/:id',
+  '/:id',
   authController.isAuthenticated,
   userController.getUser,
   (req: Request, res: Response) => {
@@ -36,7 +36,7 @@ userRouter.get(
 
 // delete a specific user by id
 userRouter.delete(
-  '/users/:id',
+  '/:id',
   authController.isAuthenticated,
   userController.deleteUser,
   (req: Request, res: Response) => {

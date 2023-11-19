@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { GameContext } from './contexts';
 import {
-  CreateAccount,
   Home,
   Game,
   GameOver,
   Instructions,
   Settings,
   Signin,
+  Signup,
   ErrorPage,
 } from './components';
 
@@ -35,7 +35,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/game" element={<Game />} />
-        <Route path="/create-account" element={<CreateAccount />} />
+        <Route path="/signup" element={<Signup />} />
         <Route path="/game-over" element={<GameOver />} />
         <Route path="/instructions" element={<Instructions />} />
         <Route path="/settings" element={<Settings />} />
