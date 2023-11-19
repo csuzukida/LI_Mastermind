@@ -8,6 +8,7 @@ const userController = {
       const { email, password } = req.body;
       const hashedPassword = await argon2.hash(password);
 
+      console.log('Creating user with data:', { email, password: hashedPassword });
       await UserModel.create({ email, password: hashedPassword });
 
       return next();

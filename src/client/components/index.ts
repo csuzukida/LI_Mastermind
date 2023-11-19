@@ -1,4 +1,3 @@
-import CreateAccount from './CreateAccount';
 import ErrorPage from './ErrorPage';
 import Game from './Game';
 import GameOver from './GameOver';
@@ -7,10 +6,10 @@ import Instructions from './Instructions';
 import Logo from './Logo';
 import Settings from './Settings';
 import Signin from './Signin';
+import Signup from './Signup';
 import VerificationForm from './VerificationForm';
 
 export {
-  CreateAccount,
   ErrorPage,
   Game,
   GameOver,
@@ -19,5 +18,6 @@ export {
   Logo,
   Settings,
   Signin,
+  Signup,
   VerificationForm,
 };

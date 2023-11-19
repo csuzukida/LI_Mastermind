@@ -2,12 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/joy';
 import Logo from './Logo';
 
+// TODO: If user is logged in, do not show signup and signin buttons, show icon and log out button instead
+
 const Home = () => {
   const navigate = useNavigate();
 
   return (
     <>
-      <Button variant="plain" onClick={() => navigate('/create-account')} color="primary">
+      <Button variant="plain" onClick={() => navigate('/signup')} color="primary">
         Create Account
       </Button>
       <Button variant="plain" onClick={() => navigate('/signin')} color="primary">
