@@ -65,7 +65,7 @@ const Settings = () => {
     setMaxGuesses(localMaxGuesses);
     setNumDigits(localNumDigits);
     setTimer(localTimer * MINUTE_IN_MILLISECONDS);
-    navigate('/');
+    navigate(-1);
   };
 
   return (
