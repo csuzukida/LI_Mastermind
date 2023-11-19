@@ -111,7 +111,7 @@ const VerificationForm = ({ title, length, onFormSubmit }: VerificationFormProps
       borderRadius="16px"
       boxShadow={3}
     >
-      <Typography variant="h4" mb={1.2}>
+      <Typography variant="h6" mb={1.2}>
         {title}
       </Typography>
       <Stack
