@@ -1,19 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { Button, Typography } from '@mui/joy';
 import { Box } from '@mui/material';
+import { boxStyle } from '../utils';
 
-const BoxStyle = {
-  borderRadius: '16px',
-  maxWidth: '600px',
-  width: '600px',
-  height: '600px',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  boxShadow: 3,
+const instructionsBoxStyle = {
   boxSizing: 'border-box',
   padding: '1.5rem',
+  ...boxStyle,
 };
 
 const Instructions = () => {
@@ -49,7 +42,7 @@ const Instructions = () => {
   ];
 
   return (
-    <Box sx={BoxStyle}>
+    <Box sx={instructionsBoxStyle}>
       <Button onClick={() => navigate('/')}>Home</Button>
       <Typography level="body-lg" sx={{ textAlign: 'center', width: '100%', marginTop: '1rem' }}>
         Instructions

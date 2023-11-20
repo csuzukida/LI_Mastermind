@@ -4,19 +4,13 @@ import { Button, Slider, Switch, Typography } from '@mui/joy';
 import { Box } from '@mui/material';
 import { Logo } from '../components';
 import { GameContext } from '../contexts';
+import { boxStyle, digitSliderMarks, guessSliderMarks, timerSliderMarks } from '../utils';
 
-const BoxStyle = {
-  borderRadius: '16px',
-  maxWidth: '600px',
-  width: '600px',
-  height: '600px',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  boxShadow: 3,
+const settingsBoxStyle = {
+  ...boxStyle,
   boxSizing: 'border-box',
   padding: '1.5rem',
+  justifyContent: 'center',
 };
 
 const Settings = () => {
@@ -31,43 +25,6 @@ const Settings = () => {
   const [showTimer, setShowTimer] = useState(false);
 
   const navigate = useNavigate();
-
-  const digitSliderMarks = [
-    {
-      value: 3,
-      label: '3',
-    },
-    {
-      value: 10,
-      label: '10',
-    },
-  ];
-
-  const guessSliderMarks = [
-    {
-      value: 1,
-      label: '1',
-    },
-    {
-      value: 20,
-      label: '20',
-    },
-  ];
-
-  const timerSliderMarks = [
-    {
-      value: 1,
-      label: '1 min',
-    },
-    {
-      value: 5,
-      label: '5 min',
-    },
-    {
-      value: 10,
-      label: '10 min',
-    },
-  ];
 
   const handleRevertClick = () => {
     setLocalMaxGuesses(10);
@@ -84,7 +41,7 @@ const Settings = () => {
   };
 
   return (
-    <Box sx={BoxStyle}>
+    <Box sx={settingsBoxStyle}>
       <Box sx={{ marginTop: '-3rem' }}>
         <Logo />
       </Box>

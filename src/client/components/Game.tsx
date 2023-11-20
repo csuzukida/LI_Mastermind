@@ -1,14 +1,21 @@
 import axios from 'axios';
+import Grid from '@mui/material/Unstable_Grid2';
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Grid from '@mui/material/Unstable_Grid2';
-import { Button, Typography } from '@mui/joy';
+import { Button } from '@mui/joy';
 import { Box } from '@mui/material';
-import { Logo, VerificationForm } from '../components';
+import { GuessHistory, GuessStats, Logo, VerificationForm } from '../components';
 import { GameContext } from '../contexts';
 import { boxStyle, getCorrectCounts } from '../utils';
 
 type GuessHistoryType = [string, number, number][] | [];
+
+const gameBoxStyle = {
+  ...boxStyle,
+  flexGrow: 1,
+  boxSizing: 'border-box',
+  padding: '1.5rem',
+};
 
 const Game = () => {
   const [guessHistory, setGuessHistory] = useState<GuessHistoryType>([]);
@@ -36,46 +43,39 @@ const Game = () => {
     getRandomNumbers();
   }, [numDigits, setAnswer]);
 
-  const checkSolution = async (userGuess: string) => {
+  const checkGameOver = (userGuess: string) => {
     // check if user guessed correctly
     if (userGuess === answer.join('')) {
       navigate('/game-over', {
         state: { win: true, message: "Great job, you're a masterful code breaker!" },
       });
-    }
 
-    // check if user ran out of guesses
-    if (guessCount + 1 >= maxGuesses) {
-      navigate('/game-over', {
-        state: { win: false, message: 'Sorry, better luck next time!' },
-      });
+      // check if user ran out of guesses
+      if (guessCount + 1 >= maxGuesses) {
+        navigate('/game-over', {
+          state: { win: false, message: 'Sorry, better luck next time!' },
+        });
+      }
     }
+  };
 
-    // increment guess count
+  const checkSolution = async (userGuess: string) => {
+    checkGameOver(userGuess);
     setGuessCount(guessCount + 1);
-
-    // reset "no matching numbers" message
     setNoneCorrect(false);
 
-    // map user guess to array of numbers
+    // map user guess to array of numbers then get correct counts
     const userGuessArray = userGuess.split('').map(Number);
-
-    // compare user guess to answer and get correct counts
     const [localCorrectCount, localCorrectLocationCount] = getCorrectCounts(answer, userGuessArray);
 
-    console.log('localCorrectCount', localCorrectCount);
-    console.log('localCorrectLocationCount', localCorrectLocationCount);
-
-    // if no correct or almost correct numbers, display message
     if (localCorrectCount === 0 && localCorrectLocationCount === 0) {
-      setNoneCorrect(true); // display message if no matching numbers
+      setNoneCorrect(true); // display message if all incorrect
     }
 
-    // add user guess to guess history
-    setGuessHistory((prevState) => [
-      ...prevState,
-      [userGuess, localCorrectCount, localCorrectLocationCount],
-    ]);
+    // add user guess to guess history and update correct counts in state
+    setGuessHistory((prevState) => {
+      return [...prevState, [userGuess, localCorrectCount, localCorrectLocationCount]];
+    });
     setCorrectCount(localCorrectCount);
     setcorrectLocationCount(localCorrectLocationCount);
   };
@@ -86,7 +86,7 @@ const Game = () => {
   };
 
   return (
-    <Box sx={boxStyle}>
+    <Box sx={gameBoxStyle}>
       <Grid container spacing={2}>
         <Grid xs={6}>
           <Button onClick={() => navigate('/')}>Home</Button>
@@ -100,55 +100,11 @@ const Game = () => {
         </Grid>
 
         <Grid xs={7} sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Box
-            bgcolor="white"
-            py={5}
-            px={{ xs: 2.5, md: 5.5 }}
-            borderRadius="16px"
-            boxShadow={3}
-            sx={{ flex: 1, maxHeight: '8rem', overflowY: 'scroll' }}
-          >
-            <Typography level="body-lg">Guess History</Typography>
-            {guessHistory
-              .map((el, i) => {
-                const [guess, correct, correctLocation] = el;
-                return (
-                  <div key={i}>
-                    <Typography level="body-sm" color="primary">
-                      Guess {i + 1}: {guess}
-                    </Typography>
-                    <Typography level="body-sm" sx={{ marginLeft: 2 }}>
-                      {correct} correct number{correct > 1 ? 's' : ''}, {correctLocation} correct
-                      location
-                    </Typography>
-                  </div>
-                );
-              })
-              .reverse()}
-          </Box>
+          <GuessHistory guessHistory={guessHistory} />
         </Grid>
 
         <Grid xs={5} sx={{ display: 'flex', flexDirection: 'column' }}>
-          <Box
-            bgcolor="white"
-            py={5}
-            px={{ xs: 2.5, md: 5.5 }}
-            borderRadius="16px"
-            boxShadow={3}
-            sx={{ flex: 1, maxHeight: '8rem' }}
-          >
-            <Typography level="body-lg">Guess Stats</Typography>
-            <Typography level="body-sm">Guesses Left: {maxGuesses - guessCount}</Typography>
-            <Typography level="body-sm">
-              {correctCount} correct number{correctCount > 1 ? 's' : ''}
-            </Typography>
-            <Typography level="body-sm">{correctLocationCount} correct location</Typography>
-            {noneCorrect && (
-              <Typography level="body-sm" color="danger">
-                All incorrect!
-              </Typography>
-            )}
-          </Box>
+          <GuessStats {...{ guessCount, correctCount, correctLocationCount, noneCorrect }} />
         </Grid>
 
         <Grid xs={12}>
@@ -166,4 +122,4 @@ const Game = () => {
 };
 
 // export helper function to test
-export { Game as default, getCorrectCounts };
+export default Game;
