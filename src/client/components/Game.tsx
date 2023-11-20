@@ -6,6 +6,19 @@ import { Logo, VerificationForm } from '../components';
 import { GameContext } from '../contexts';
 import Grid from '@mui/material/Unstable_Grid2';
 
+const BoxStyle = {
+  flexGrow: 1,
+  maxWidth: '600px',
+  height: '600px',
+  borderRadius: '16px',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  boxShadow: 3,
+  boxSizing: 'border-box',
+  padding: '1.5rem',
+};
+
 const Game = () => {
   const [guessHistory, setGuessHistory] = useState<[string, number, number][] | []>([]);
   const [guessCount, setGuessCount] = useState(0);
@@ -91,7 +104,7 @@ const Game = () => {
   console.log('answer', answer);
 
   return (
-    <Box sx={{ flexGrow: 1, maxWidth: 500, margin: 'auto' }}>
+    <Box sx={BoxStyle}>
       <Grid container spacing={2}>
         <Grid xs={6}>
           <Button onClick={() => navigate('/')}>Home</Button>
@@ -100,7 +113,7 @@ const Game = () => {
           <Button onClick={() => navigate('/settings')}>Settings</Button>
         </Grid>
 
-        <Grid xs={12}>
+        <Grid xs={12} sx={{ marginTop: '-1rem' }}>
           <Logo />
         </Grid>
 
@@ -139,7 +152,7 @@ const Game = () => {
             px={{ xs: 2.5, md: 5.5 }}
             borderRadius="16px"
             boxShadow={3}
-            sx={{ flex: 1, maxHeight: '8rem', overflowY: 'scroll' }}
+            sx={{ flex: 1, maxHeight: '8rem' }}
           >
             <Typography level="body-lg">Guess Stats</Typography>
             <Typography level="body-sm">Guesses Left: {maxGuesses - guessCount}</Typography>

@@ -1,6 +1,7 @@
 import argon2 from 'argon2';
-import { Request, Response, NextFunction } from 'express';
 import UserModel from '../models/UserModel';
+import { Request, Response, NextFunction } from 'express';
+import { ISession } from '../../types/ISession';
 
 const userController = {
   createUser: async (req: Request, res: Response, next: NextFunction) => {
@@ -13,7 +14,10 @@ const userController = {
         return res.status(400).json({ message: 'Email and password are required' });
       }
 
-      await UserModel.create({ email, password: hashedPassword });
+      const user = await UserModel.create({ email, password: hashedPassword });
+
+      // set the userId in the session
+      (req.session as ISession).userId = user._id.toString();
 
       return next();
     } catch (error) {
@@ -24,6 +28,7 @@ const userController = {
   getUser: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
+
       // catch missing id in the request params
       if (!id) {
         return res.status(400).json({ message: 'Missing id or malformed request' });

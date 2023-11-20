@@ -9,6 +9,8 @@ interface IGameContext {
   setTimer: (timer: number) => void;
   maxGuesses: number;
   setMaxGuesses: (maxGuesses: number) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
 }
 
 const defaultContext: IGameContext = {
@@ -20,6 +22,8 @@ const defaultContext: IGameContext = {
   setTimer: () => {},
   maxGuesses: 10,
   setMaxGuesses: () => {},
+  isLoggedIn: false,
+  setIsLoggedIn: () => {},
 };
 
 const GameContext = createContext<IGameContext>(defaultContext);

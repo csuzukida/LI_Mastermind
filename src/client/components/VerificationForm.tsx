@@ -1,5 +1,6 @@
 import { useRef, KeyboardEvent, useState, FormEvent, FocusEvent, useCallback } from 'react';
-import { Box, Input, Stack, Typography, styled } from '@mui/material';
+import { Box, Input, Stack, styled } from '@mui/material';
+import { Typography } from '@mui/joy';
 import { LoadingButton } from '@mui/lab';
 
 const VerificationInput = styled(Input)(({ theme }) => ({
@@ -111,7 +112,7 @@ const VerificationForm = ({ title, length, onFormSubmit }: VerificationFormProps
       borderRadius="16px"
       boxShadow={3}
     >
-      <Typography variant="h6" mb={1.2}>
+      <Typography level="body-lg" mb={1.2}>
         {title}
       </Typography>
       <Stack
@@ -147,7 +148,7 @@ const VerificationForm = ({ title, length, onFormSubmit }: VerificationFormProps
           variant="contained"
           sx={{ paddingX: (theme) => theme.spacing(8) }}
         >
-          {'confirm'}
+          Submit
         </LoadingButton>
       </Box>
     </Box>

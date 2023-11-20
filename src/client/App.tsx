@@ -18,6 +18,7 @@ const App = () => {
   const [answer, setAnswer] = useState<number[]>([]);
   const [maxGuesses, setMaxGuesses] = useState<number>(10);
   const [timer, setTimer] = useState<number>(60000 * 5); // 5 minutes
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   return (
     <GameContext.Provider
@@ -30,6 +31,8 @@ const App = () => {
         setTimer,
         maxGuesses,
         setMaxGuesses,
+        isLoggedIn,
+        setIsLoggedIn,
       }}
     >
       <Routes>
