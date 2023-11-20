@@ -9,7 +9,7 @@ import cors from 'cors';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import apiRoutes from './routes/apiRoutes';
-import CustomError from '../utils/CustomError';
+import CustomError from './utils/CustomError';
 
 // TODO: Implement file logging with winston
 // TODO: Implement rate limiting with express-rate-limit

@@ -8,16 +8,11 @@ import { Box } from '@mui/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Logo } from '../components';
 import { GameContext } from '../contexts';
+import { boxStyle } from '../utils';
 
-const BoxStyle = {
-  borderRadius: '16px',
-  width: '600px',
-  height: '600px',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
+const signupBoxStyle = {
+  ...boxStyle,
   justifyContent: 'center',
-  boxShadow: 3,
 };
 
 const SignupInput = z.object({
@@ -64,7 +59,7 @@ const Signup = () => {
   const navigate = useNavigate();
 
   return (
-    <Box sx={BoxStyle}>
+    <Box sx={signupBoxStyle}>
       <Logo />
 
       <form onSubmit={handleSubmit(onSubmit)}>

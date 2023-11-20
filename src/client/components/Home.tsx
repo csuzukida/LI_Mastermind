@@ -5,25 +5,7 @@ import { Avatar, Button } from '@mui/joy';
 import { Box } from '@mui/material';
 import { GameContext } from '../contexts';
 import Logo from './Logo';
-
-const BoxStyle = {
-  borderRadius: '16px',
-  width: '600px',
-  height: '600px',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  boxShadow: 3,
-};
-
-const ButtonContainerStyle = {
-  display: 'flex',
-  justifyContent: 'flex-end',
-  alignItems: 'center',
-  width: '100%',
-  paddingTop: '2rem',
-  paddingRight: '5rem',
-};
+import { boxStyle, buttonContainerStyle } from '../utils';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -41,9 +23,9 @@ const Home = () => {
   };
 
   return (
-    <Box sx={BoxStyle}>
+    <Box sx={boxStyle}>
       {!isLoggedIn ? (
-        <Box sx={ButtonContainerStyle}>
+        <Box sx={buttonContainerStyle}>
           <Button variant="plain" size="sm" onClick={() => navigate('/signup')} color="primary">
             Sign up
           </Button>
@@ -52,7 +34,7 @@ const Home = () => {
           </Button>
         </Box>
       ) : (
-        <Box sx={ButtonContainerStyle}>
+        <Box sx={buttonContainerStyle}>
           <Button variant="plain" size="sm" onClick={handleSignOut}>
             Sign out
           </Button>
