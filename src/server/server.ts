@@ -5,10 +5,18 @@ import express, { Express, Request, Response } from 'express';
 import path from 'path';
 import http from 'http';
 import util from 'util';
+import cors from 'cors';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import apiRoutes from './routes/apiRoutes';
 import CustomError from '../utils/CustomError';
+
+// TODO: Implement file logging with winston
+// TODO: Implement rate limiting with express-rate-limit
+// TODO: Implement helmet for security
+// TODO: Implement compression for performance
+// TODO: Implement validation with express-validator
+// TODO: Implement testing with jest
 
 const app: Express = express();
 const MODE = process.env.NODE_ENV || 'development';
@@ -23,6 +31,7 @@ const server = http.createServer(app).listen(PORT, () => {
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 app.use(
   session({
     secret: SESSION_SECRET,
@@ -40,7 +49,7 @@ app.use(
 // api routes
 app.use('/api', apiRoutes);
 
-// check for prod and serve static assets and index.html
+// check for prod to serve static assets and index.html, otherwise webpack dev server handles it
 if (MODE === 'production') {
   app.use('/client', express.static(path.join(__dirname, '../../dist/client')));
   app.get('*', (req: Request, res: Response) => {
