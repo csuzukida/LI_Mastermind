@@ -18,6 +18,13 @@ import CustomError from './utils/CustomError';
 // TODO: Implement validation with express-validator
 // TODO: Implement testing with jest
 
+// TODO: Implement file logging with winston
+// TODO: Implement rate limiting with express-rate-limit
+// TODO: Implement helmet for security
+// TODO: Implement compression for performance
+// TODO: Implement validation with express-validator
+// TODO: Implement testing with jest
+
 const app: Express = express();
 const MODE = process.env.NODE_ENV || 'development';
 const PORT = 3000;
