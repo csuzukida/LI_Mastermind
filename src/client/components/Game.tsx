@@ -50,6 +50,7 @@ const Game = () => {
       navigate('/game-over', {
         state: { win: true, message: "Great job, you're a masterful code breaker!" },
       });
+    }
 
     // check if user ran out of guesses
     if (guessCount + 1 >= maxGuesses) {
