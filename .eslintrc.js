@@ -3,6 +3,7 @@ module.exports = {
   env: {
     node: true,
     es6: true,
+    jest: true,
   },
   parserOptions: { ecmaVersion: 2020, sourceType: 'module' },
   ignorePatterns: ['node_modules/*'],
@@ -37,6 +38,7 @@ module.exports = {
         'plugin:prettier/recommended',
         'plugin:testing-library/react',
         'plugin:jest-dom/recommended',
+        'plugin:jest/recommended',
       ],
       rules: {
         'no-restricted-imports': [
