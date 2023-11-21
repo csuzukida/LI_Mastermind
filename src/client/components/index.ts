@@ -1,6 +1,8 @@
 import ErrorPage from './ErrorPage';
 import Game from './Game';
 import GameOver from './GameOver';
+import GuessHistory from './GuessHistory';
+import GuessStats from './GuessStats';
 import Home from './Home';
 import Instructions from './Instructions';
 import Logo from './Logo';
@@ -13,6 +15,8 @@ export {
   ErrorPage,
   Game,
   GameOver,
+  GuessHistory,
+  GuessStats,
   Home,
   Instructions,
   Logo,

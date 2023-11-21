@@ -8,18 +8,13 @@ import { Box } from '@mui/material';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Logo } from '../components';
 import { GameContext } from '../contexts';
+import { boxStyle } from '../utils';
 
 // TODO: Add forgot password link
 
-const BoxStyle = {
-  borderRadius: '16px',
-  width: '600px',
-  height: '600px',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
+const signinBoxStyle = {
+  ...boxStyle,
   justifyContent: 'center',
-  boxShadow: 3,
 };
 
 const SigninInput = z.object({
@@ -72,7 +67,7 @@ const Signin = () => {
   const navigate = useNavigate();
 
   return (
-    <Box sx={BoxStyle}>
+    <Box sx={signinBoxStyle}>
       <Logo />
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box sx={{ marginBottom: '1rem' }}>
