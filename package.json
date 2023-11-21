@@ -4,11 +4,9 @@
   "description": "Coding Challenge for LinkedIn Reach",
   "main": "index.ts",
   "scripts": {
-    "start": "node dist/server/server.js",
-    "build": "npm run build-client && npm run build-server",
-    "build-client": "webpack --config webpack.client.js --mode production",
-    "build-server": "webpack --config webpack.server.js --mode production",
-    "dev": "concurrently \"webpack serve --config webpack.client.js --mode development\" \"cross-env NODE_ENV=development npx nodemon\"",
+    "start": "cross-env NODE_ENV=production ts-node src/server/server.ts",
+    "build": "webpack --mode production",
+    "dev": "concurrently \"webpack serve --mode development\" \"cross-env NODE_ENV=development npx nodemon\"",
     "prettier": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
