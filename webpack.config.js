@@ -1,24 +1,13 @@
 const path = require('path');
-const { merge } = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // new
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const commonConfig = require('./webpack.common.js');
+const { merge } = require('webpack-merge');
 
 module.exports = (env, argv) => {
   const IS_DEVELOPMENT = argv.mode === 'development';
 
-  const clientConfig = {
-    devServer: {
-      historyApiFallback: true,
-      static: {
-        directory: path.resolve(__dirname, 'dist/client'),
-      },
-      proxy: {
-        '/api': 'http://localhost:3000',
-      },
-    },
-    devtool: IS_DEVELOPMENT ? 'inline-source-map' : false,
+  const commonConfig = {
     entry: './src/client/index.tsx',
     output: {
       path: path.resolve(__dirname, 'dist/client'),
@@ -31,15 +20,7 @@ module.exports = (env, argv) => {
         {
           test: /\.tsx?$/,
           exclude: /node_modules/,
-          use: [
-            {
-              loader: 'ts-loader',
-              options: {
-                transpileOnly: true,
-                configFile: 'tsconfig.client.json',
-              },
-            },
-          ],
+          use: 'ts-loader',
         },
         {
           test: /\.css$/,
@@ -52,16 +33,36 @@ module.exports = (env, argv) => {
       new HtmlWebpackPlugin({
         template: 'src/client/index.html',
       }),
+      new ForkTsCheckerWebpackPlugin(),
+    ],
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.css', '.scss'],
+    },
+  };
+
+  const prodConfig = {
+    output: {
+      publicPath: '/client/',
+    },
+    plugins: [
       new MiniCssExtractPlugin({
         filename: '[name].[contenthash].css',
-      }),
-      new ForkTsCheckerWebpackPlugin({
-        typescript: {
-          configFile: path.resolve(__dirname, 'tsconfig.client.json'),
-        },
       }),
     ],
   };
 
-  return merge(commonConfig, clientConfig);
+  const devConfig = {
+    devServer: {
+      historyApiFallback: true,
+      static: {
+        directory: path.resolve(__dirname, 'dist/client'),
+      },
+      proxy: {
+        '/api': 'http://localhost:3000',
+      },
+    },
+    devtool: 'inline-source-map',
+  };
+
+  return merge(commonConfig, IS_DEVELOPMENT ? devConfig : prodConfig);
 };
