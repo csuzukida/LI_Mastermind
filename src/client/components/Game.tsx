@@ -4,9 +4,9 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/joy';
 import { Box } from '@mui/material';
-import { GuessHistory, GuessStats, Logo, VerificationForm } from '../components';
 import { GameContext } from '../contexts';
 import { boxStyle, getCorrectCounts } from '../utils';
+import { GuessHistory, GuessStats, Logo, VerificationForm } from '../components';
 
 type GuessHistoryType = [string, number, number][] | [];
 
@@ -44,24 +44,23 @@ const Game = () => {
   }, [numDigits, setAnswer]);
 
   const checkGameOver = (userGuess: string) => {
+    setGuessCount(guessCount + 1);
     // check if user guessed correctly
     if (userGuess === answer.join('')) {
       navigate('/game-over', {
         state: { win: true, message: "Great job, you're a masterful code breaker!" },
       });
 
-      // check if user ran out of guesses
-      if (guessCount + 1 >= maxGuesses) {
-        navigate('/game-over', {
-          state: { win: false, message: 'Sorry, better luck next time!' },
-        });
-      }
+    // check if user ran out of guesses
+    if (guessCount + 1 >= maxGuesses) {
+      navigate('/game-over', {
+        state: { win: false, message: 'Sorry, better luck next time!' },
+      });
     }
   };
 
   const checkSolution = async (userGuess: string) => {
     checkGameOver(userGuess);
-    setGuessCount(guessCount + 1);
     setNoneCorrect(false);
 
     // map user guess to array of numbers then get correct counts
