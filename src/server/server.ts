@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express, { Express, Request, Response, NextFunction } from 'express';
+import { rateLimit } from 'express-rate-limit';
 import mongoose from 'mongoose';
 import path from 'path';
 import http from 'http';
@@ -13,10 +14,8 @@ import apiRoutes from './routes/apiRoutes';
 import CustomError from './utils/CustomError';
 
 // TODO: Implement file logging with winston
-// TODO: Implement rate limiting with express-rate-limit
 // TODO: Implement helmet for security
 // TODO: Implement compression for performance
-// TODO: Implement validation with express-validator
 
 const app: Express = express();
 const MODE = process.env.NODE_ENV || 'development';
@@ -24,6 +23,12 @@ const HOST_NAME = '0.0.0.0';
 const PORT = 3000;
 const SESSION_SECRET = process.env.SESSION_SECRET || '';
 const URI = process.env.DATABASE_URL || 'mongodb://localhost:27017';
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
 
 let server: http.Server | null = null;
 
@@ -92,7 +97,8 @@ app.use(
 );
 
 // api routes
-app.use('/api', apiRoutes);
+app.use('/api', limiter); // limit api requests
+app.use('/api', apiRoutes); // use a router to contain all api routes
 
 // check for prod to serve static assets and index.html, otherwise webpack dev server handles it
 if (MODE === 'production') {
