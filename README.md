@@ -174,13 +174,14 @@ You can find the tests contained in the `__tests__` directory in the root of the
   GET /api/random-numbers?difficulty={difficulty}&min={min}&max={max}
 ```
 
-| Parameter   | Type  | Description                                                            |
-| :---------- | :---- | :--------------------------------------------------------------------- |
+| Parameter    | Type  | Description                                                            |
+| :----------- | :---- | :--------------------------------------------------------------------- |
 | `difficulty` | `int` | number of digits in combination (lowest is 3, max is 10, default is 4) |
-| `min`       | `int` | lower threshold (inclusive) of digit generated (lowest is 0)           |
-| `max`       | `int` | upper threshold (inclusive) of digit generated (highest is 9)          |
+| `min`        | `int` | lower threshold (inclusive) of digit generated (lowest is 0)           |
+| `max`        | `int` | upper threshold (inclusive) of digit generated (highest is 9)          |
 
 Example call:
+
 ```javascript
 /api/random-numbers?difficulty=4&min=0&max=9
 ```
@@ -296,7 +297,7 @@ Now that the app was shaping up, it was time to think about deploying the app to
 
 ## Authors
 
-***Chris Suzukida***  
+**_Chris Suzukida_**  
 Github [@csuzukida](https://www.github.com/csuzukida)  
 LinkedIn [@chris-suzukida](https://www.linkedin.com/in/chris-suzukida/)
 
