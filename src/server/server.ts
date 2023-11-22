@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import express, { Express, Request, Response } from 'express';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import path from 'path';
 import http from 'http';
@@ -20,16 +20,18 @@ import CustomError from './utils/CustomError';
 
 const app: Express = express();
 const MODE = process.env.NODE_ENV || 'development';
+const HOST_NAME = '0.0.0.0';
 const PORT = 3000;
 const SESSION_SECRET = process.env.SESSION_SECRET || '';
-const URI = process.env.MONGO_URI || 'mongodb://localhost:27017';
+const URI = process.env.DATABASE_URL || 'mongodb://localhost:27017';
 
 let server: http.Server | null = null;
 
 // Start server function
-export const startServer = async (): Promise<http.Server> => {
+export const startServer = async (): Promise<http.Server | undefined> => {
   if (server) {
-    throw new Error('Server is already running');
+    console.log('Server already started');
+    return;
   }
 
   // Connect to MongoDB here
@@ -40,34 +42,35 @@ export const startServer = async (): Promise<http.Server> => {
     });
     console.log('Connected to MongoDB');
   } catch (error) {
-    console.error(error);
+    console.error(`Failed to connect to MongoDB: ${error}`);
+    process.exit(1);
   }
 
-  return new Promise((resolve, reject) => {
-    server = app
-      .listen(PORT, () => {
-        console.log(`Server is running at http://localhost:${PORT}`);
-        if (server) resolve(server);
-      })
-      .on('error', reject);
+  server = app.listen(PORT, HOST_NAME, () => {
+    console.log(`Server running at http://${HOST_NAME}:${PORT}/`);
   });
 };
 
 // Stop server function
 export const stopServer = async (): Promise<void> => {
-  await mongoose.disconnect();
-  await new Promise<void>((resolve, reject) => {
-    if (server) {
-      server.close((err) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        server = null;
-        resolve();
-      });
-    }
-  });
+  if (server) {
+    server.close((err) => {
+      if (err) {
+        console.error(`Error closing server: ${err}`);
+        return;
+      }
+      console.log('Sever closed');
+      server = null;
+    });
+  }
+
+  try {
+    console.log('Disconnecting from MongoDB...');
+    await mongoose.disconnect();
+    console.log('Disconnected from MongoDB');
+  } catch (error) {
+    console.log(`Failed to disconnect from MongoDB: ${error}`);
+  }
 };
 
 // middleware
@@ -79,7 +82,7 @@ app.use(
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    store: MongoStore.create({ mongoUrl: process.env.DATABASE_URL }),
     cookie: {
       httpOnly: true,
       secure: MODE === 'production',
@@ -107,7 +110,8 @@ if (MODE === 'production') {
 }
 
 // global error handler
-app.use((err: Error, req: Request, res: Response) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
   console.error(err.stack || util.inspect(err));
 
   const statusCode = err instanceof CustomError ? err.statusCode : 500;
