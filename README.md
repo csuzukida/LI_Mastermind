@@ -2,6 +2,7 @@
 
 # Table of Contents
 
+- [Play on the web](#play-on-the-web)
 - [Setup and Run locally](#run-locally)
 - [Environment Variables](#environment-variables)
 - [Running Tests](#running-tests)
@@ -16,6 +17,10 @@
 - [FAQs](#faq)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgements)
+
+## Play on the Web
+
+Visit [https://li-mastermind.fly.dev](https://li-mastermind.fly.dev) to see a deployed version of this app!
 
 ## Setup and Run Locally
 
@@ -281,9 +286,13 @@ My project configurations, while allowing a solid dev and prod environment, were
 
 I actually caught the game logic error I previously mentioned when I setup my Jest tests, because I was getting the unexpected results back. I was able to go back and refactor the game logic by using two frequency maps, one for the guess array and answer array and do a comparison of the frequency values of each number.
 
-<!-- ### Thinking about Deployment (Day 4)
+### Thinking about Deployment (Day 4)
 
-Now that the app was shaping up, it was time to think about deploying the app to make it useable without installation or having to worry about the "it works on my machine" type issues. There were two main areas I wanted to tackle now before heading into stretch feature territory: containerizing the app via Docker and deploying on a free hosting service ([fly.io](https://fly.io/)). -->
+Now that the app was shaping up, it was time to think about deploying the app to make it useable without installation or having to worry about the "it works on my machine" type issues. There were two main areas I wanted to tackle now before heading into stretch feature territory: containerizing the app via Docker and deploying it. Luckily, I managed to find ([fly.io](https://fly.io/)), which had a really nice way of integrating both and provided some really nice CLI commands to make deploying easy. The tooling was the easiest aspect of this, as I realized there were some issues in my project setup that required some heavy reworking.
+
+This mostly involved modifying my server file to make the host be available on '0.0.0.0' instead of just 'localhost' or '127.0.0.1'. I was getting some mishandled promises when trying to start the server, so I went back and refactored my logic to be more simple and to add better error handling. After I get the host situation resolved, I was running into issues whitelisting my MongoDB database's IP address.
+
+Once that was all resolved, I had to tackle one last problem, which was that my environment variables were not being set correctly insie the deployment. I kept trying to set them over and over, but eventually it was resolved by manually clearing them out and setting them one last time. Finally, the app was deployed and live!
 
 ## FAQ
 
