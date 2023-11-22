@@ -1,0 +1,57 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# testing
+__tests__/
+/coverage
+/cypress/videos
+/cypress/screenshots
+
+# production
+/dist
+
+# assets
+/assets
+
+# misc
+.DS_Store
+
+# Source maps and TypeScript files
+**/*.ts.map
+**/*.tsx.map
+
+# README and other markdown files
+*.md
+
+# License file
+LICENSE
