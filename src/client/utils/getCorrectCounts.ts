@@ -12,7 +12,6 @@ export const getCorrectCounts = (answer: number[], guess: number[]) => {
   answer.forEach((num) => {
     answerFreqMap[num] = (answerFreqMap[num] || 0) + 1;
   });
-
   guess.forEach((num, i) => {
     if (num === answer[i]) numCorrectLocation++;
     guessFreqMap[num] = (guessFreqMap[num] || 0) + 1;

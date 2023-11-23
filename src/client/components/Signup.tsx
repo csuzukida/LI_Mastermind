@@ -79,13 +79,17 @@ const Signup = () => {
             <Controller
               name="password"
               control={control}
-              render={({ field }) => <Input placeholder="password" color="primary" {...field} />}
+              render={({ field }) => (
+                <Input type="password" placeholder="password" color="primary" {...field} />
+              )}
             />
             {errors.password && <FormHelperText>{errors.password.message}</FormHelperText>}
           </FormControl>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Button onClick={handleSubmit(onSubmit)}>Sign up</Button>
+          <Button type="submit" onClick={handleSubmit(onSubmit)}>
+            Sign up
+          </Button>
           <Button onClick={() => navigate(-1)}>Home</Button>
         </Box>
       </form>

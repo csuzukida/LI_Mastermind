@@ -1,7 +1,18 @@
-import { useRef, KeyboardEvent, useState, FormEvent, FocusEvent, useCallback } from 'react';
+import {
+  useRef,
+  KeyboardEvent,
+  useState,
+  FormEvent,
+  FocusEvent,
+  useCallback,
+  useContext,
+  useEffect,
+} from 'react';
 import { Box, Input, Stack, styled } from '@mui/material';
 import { Typography } from '@mui/joy';
 import { LoadingButton } from '@mui/lab';
+import { Timer } from '../components';
+import { GameContext } from '../contexts';
 
 const VerificationInput = styled(Input)(({ theme }) => ({
   width: '2rem',
@@ -29,7 +40,11 @@ const VerificationForm = ({ title, length, onFormSubmit }: VerificationFormProps
   const [isValid, setIsValid] = useState(true);
   const [code, setCode] = useState<string[]>(Array(length).fill(''));
 
+  const { shouldShowTimer } = useContext(GameContext);
+
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {}, [shouldShowTimer]);
 
   const update = useCallback((index: number, val: string) => {
     return setCode((prevState) => {
@@ -115,6 +130,7 @@ const VerificationForm = ({ title, length, onFormSubmit }: VerificationFormProps
       <Typography level="body-lg" mb={1.2}>
         {title}
       </Typography>
+      {shouldShowTimer && <Timer />}
       <Stack
         component={'fieldset'}
         border={'none'}
