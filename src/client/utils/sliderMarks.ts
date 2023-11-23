@@ -9,6 +9,28 @@ export const digitSliderMarks = [
   },
 ];
 
+export const minValueSliderMarks = [
+  {
+    value: 0,
+    label: '0',
+  },
+  {
+    value: 9,
+    label: '9',
+  },
+];
+
+export const maxValueSliderMarks = [
+  {
+    value: 1,
+    label: '1',
+  },
+  {
+    value: 9,
+    label: '9',
+  },
+];
+
 export const guessSliderMarks = [
   {
     value: 1,

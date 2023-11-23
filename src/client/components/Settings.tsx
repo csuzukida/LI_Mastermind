@@ -4,7 +4,14 @@ import { Button, Slider, Switch, Typography } from '@mui/joy';
 import { Box } from '@mui/material';
 import { Logo } from '../components';
 import { GameContext } from '../contexts';
-import { boxStyle, digitSliderMarks, guessSliderMarks, timerSliderMarks } from '../utils';
+import {
+  boxStyle,
+  digitSliderMarks,
+  guessSliderMarks,
+  timerSliderMarks,
+  minValueSliderMarks,
+  maxValueSliderMarks,
+} from '../utils';
 
 const settingsBoxStyle = {
   ...boxStyle,
@@ -14,15 +21,29 @@ const settingsBoxStyle = {
 };
 
 const Settings = () => {
-  const { numDigits, setNumDigits, timer, setTimer, maxGuesses, setMaxGuesses } =
-    useContext(GameContext);
+  const {
+    numDigits,
+    setNumDigits,
+    minValue,
+    setMinValue,
+    maxValue,
+    setMaxValue,
+    timerSetting,
+    setTimerSetting,
+    maxGuesses,
+    setMaxGuesses,
+    shouldShowTimer,
+    setShouldShowTimer,
+  } = useContext(GameContext);
 
   const MINUTE_IN_MILLISECONDS = 60000;
   // hold local state for default reset
   const [localMaxGuesses, setLocalMaxGuesses] = useState<number>(maxGuesses);
   const [localNumDigits, setLocalNumDigits] = useState<number>(numDigits);
-  const [localTimer, setLocalTimer] = useState<number>(timer / MINUTE_IN_MILLISECONDS);
-  const [showTimer, setShowTimer] = useState(false);
+  const [localMinValue, setLocalMinValue] = useState<number>(minValue);
+  const [localMaxValue, setLocalMaxValue] = useState<number>(maxValue);
+  const [localTimer, setLocalTimer] = useState<number>(timerSetting / MINUTE_IN_MILLISECONDS);
+  const [showTimerSetting, setShowTimerSetting] = useState(shouldShowTimer);
 
   const navigate = useNavigate();
 
@@ -30,13 +51,22 @@ const Settings = () => {
     setLocalMaxGuesses(10);
     setLocalNumDigits(4);
     setLocalTimer(5);
-    setShowTimer(false);
+    setShowTimerSetting(false);
+    setLocalMinValue(0);
+    setLocalMaxValue(7);
   };
 
   const handleSaveClick = () => {
+    if (localMinValue >= localMaxValue) {
+      alert('Minimum value must be less than maximum value');
+      return;
+    }
     setMaxGuesses(localMaxGuesses);
     setNumDigits(localNumDigits);
-    setTimer(localTimer * MINUTE_IN_MILLISECONDS);
+    setMinValue(localMinValue);
+    setMaxValue(localMaxValue);
+    setTimerSetting(localTimer * MINUTE_IN_MILLISECONDS);
+    setShouldShowTimer(showTimerSetting);
     navigate(-1);
   };
 
@@ -69,9 +99,34 @@ const Settings = () => {
             setLocalMaxGuesses(value as number);
           }}
         />
+        <Typography>Minimum value of a single digit in the combination:</Typography>
+        <Slider
+          value={localMinValue}
+          min={0}
+          max={9}
+          marks={minValueSliderMarks}
+          valueLabelDisplay="auto"
+          onChange={(e, value) => {
+            setLocalMinValue(value as number);
+          }}
+        />
+        <Typography>Maximum value of a single digit in the combination: </Typography>
+        <Slider
+          value={localMaxValue}
+          min={1}
+          max={9}
+          marks={maxValueSliderMarks}
+          valueLabelDisplay="auto"
+          onChange={(e, value) => {
+            setLocalMaxValue(value as number);
+          }}
+        />
         <Typography>Enable Timer?</Typography>
-        <Switch checked={showTimer} onChange={() => setShowTimer(!showTimer)} />
-        {showTimer && (
+        <Switch
+          checked={showTimerSetting}
+          onChange={() => setShowTimerSetting(!showTimerSetting)}
+        />
+        {showTimerSetting && (
           <>
             <Typography>Timer Length: </Typography>
             <Slider
@@ -97,6 +152,9 @@ const Settings = () => {
           <Button onClick={handleSaveClick}>Save Settings</Button>
         </Box>
       </Box>
+      <br />
+      <br />
+      <Typography>Saving settings will generate a new combination!</Typography>
     </Box>
   );
 };

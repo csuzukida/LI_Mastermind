@@ -38,7 +38,9 @@ const Home = () => {
           <Button variant="plain" size="sm" onClick={handleSignOut}>
             Sign out
           </Button>
-          <Avatar>Test {/*This is a placeholder for an avatar image*/}</Avatar>
+          <Avatar onClick={() => navigate('/account')}>
+            Test {/*This is a placeholder for an avatar image*/}
+          </Avatar>
         </Box>
       )}
       <Box sx={{ marginTop: '7rem' }}>

@@ -1,48 +1,38 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
+import { param } from 'express-validator';
 import { authController, userController } from '../controllers';
+import { validationErrorHandler } from '../utils/validationErrorHandler';
 
 const userRouter = express.Router();
 
-// create user
-userRouter.post('/signup', userController.createUser, (req: Request, res: Response) => {
-  res.sendStatus(201);
-});
+userRouter.post('/signup', userController.createUser);
+userRouter.post('/login', userController.loginUser);
+userRouter.post('/logout', userController.logoutUser);
+userRouter.post('/verify-password', authController.verifyPassword);
+userRouter.post('/change-password', authController.changePassword);
 
-// login user
-userRouter.post('/login', authController.loginUser);
-
-// logout user
-userRouter.post('/logout', authController.logoutUser);
-
-// get all users
+userRouter.get('/me', authController.isAuthenticated, userController.getOwnData); // get email of logged in user
 userRouter.get(
   '/all-users',
   authController.isAuthenticated,
   authController.checkRole(['admin']),
-  userController.getAllUsers,
-  (req: Request, res: Response) => {
-    res.status(200).json(res.locals.users);
-  }
+  userController.getAllUsers
 );
-
-// get a specific user by id
 userRouter.get(
   '/:id',
+  param('id').isMongoId(),
+  validationErrorHandler,
   authController.isAuthenticated,
-  userController.getUser,
-  (req: Request, res: Response) => {
-    res.status(200).json(res.locals.user);
-  }
+  authController.checkRole(['admin']),
+  userController.getUser
 );
 
-// delete a specific user by id
 userRouter.delete(
   '/:id',
+  param('id').isMongoId(),
+  validationErrorHandler,
   authController.isAuthenticated,
-  userController.deleteUser,
-  (req: Request, res: Response) => {
-    res.sendStatus(204);
-  }
+  userController.deleteUser
 );
 
 export default userRouter;

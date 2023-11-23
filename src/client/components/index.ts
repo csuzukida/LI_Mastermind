@@ -1,3 +1,4 @@
+import Account from './Account';
 import ErrorPage from './ErrorPage';
 import Game from './Game';
 import GameOver from './GameOver';
@@ -9,9 +10,11 @@ import Logo from './Logo';
 import Settings from './Settings';
 import Signin from './Signin';
 import Signup from './Signup';
+import Timer from './Timer';
 import VerificationForm from './VerificationForm';
 
 export {
+  Account,
   ErrorPage,
   Game,
   GameOver,
@@ -23,5 +26,6 @@ export {
   Settings,
   Signin,
   Signup,
+  Timer,
   VerificationForm,
 };
