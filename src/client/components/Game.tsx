@@ -23,15 +23,17 @@ const Game = () => {
   const [correctCount, setCorrectCount] = useState(0);
   const [correctLocationCount, setcorrectLocationCount] = useState(0);
   const [noneCorrect, setNoneCorrect] = useState(false);
-
-  const { numDigits, maxGuesses, answer, setAnswer } = useContext(GameContext);
+  const { numDigits, maxGuesses, minValue, maxValue, answer, setAnswer, time } =
+    useContext(GameContext);
   const navigate = useNavigate();
 
   // fetch random numbers from server
   useEffect(() => {
     const getRandomNumbers = async () => {
       try {
-        const response = await axios.get(`/api/random-numbers/?difficulty=${numDigits}`);
+        const response = await axios.get(
+          `/api/random-numbers/?difficulty=${numDigits}&min=${minValue}&max=${maxValue}`
+        );
         const randomNumbers: number[] = response.data;
         // logging for ease of code demo purposes
         console.log('randomNumbers', randomNumbers);
@@ -41,7 +43,15 @@ const Game = () => {
       }
     };
     getRandomNumbers();
-  }, [numDigits, setAnswer]);
+  }, [numDigits, setAnswer, minValue, maxValue]);
+
+  useEffect(() => {
+    if (time === 0) {
+      navigate('/game-over', {
+        state: { win: false, message: 'You ran out of time, better luck next time!' },
+      });
+    }
+  }, [time, navigate]);
 
   const checkGameOver = (userGuess: string) => {
     setGuessCount(guessCount + 1);
@@ -51,7 +61,6 @@ const Game = () => {
         state: { win: true, message: "Great job, you're a masterful code breaker!" },
       });
     }
-
     // check if user ran out of guesses
     if (guessCount + 1 >= maxGuesses) {
       navigate('/game-over', {

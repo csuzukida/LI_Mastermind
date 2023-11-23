@@ -58,7 +58,7 @@ module.exports = (env, argv) => {
         directory: path.resolve(__dirname, 'dist/client'),
       },
       proxy: {
-        '/api': 'http://localhost:3000',
+        '/api': 'http://0.0.0.0:3000',
       },
     },
     devtool: 'inline-source-map',

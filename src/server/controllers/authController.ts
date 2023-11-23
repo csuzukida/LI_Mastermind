@@ -8,60 +8,73 @@ const authController = {
     if ((req.session as ISession).userId) {
       return next();
     }
+
     res.status(401).json({ message: 'Unauthorized' });
-  },
-
-  loginUser: async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { email, password } = req.body;
-
-      const user = await UserModel.findOne({ email });
-
-      if (user && (await argon2.verify(user.password, password))) {
-        (req.session as ISession).userId = user._id.toString();
-        return res.status(200).json({ message: 'login successful' });
-      } else {
-        return res.status(401).json({ message: 'login unsuccessful' });
-      }
-    } catch (error) {
-      return next(error);
-    }
-  },
-
-  logoutUser: (req: Request, res: Response) => {
-    req.session.destroy((error) => {
-      if (error) {
-        return res.status(500).json({ message: 'Could not log out' });
-      } else {
-        res.clearCookie('connect.sid');
-        return res.status(200).json({ message: 'logout successful' });
-      }
-    });
   },
 
   checkRole: (roles: string[]) => async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // grab the user id from the session
       const { userId } = req.session as ISession;
-
-      // double check that the user is logged in
-      if (!userId) {
-        return res.status(401).json({ message: 'Unauthorized' });
-      }
-
-      // check if user is in the database
       const user = await UserModel.findById(userId);
+
+      // if there's no user or user role is not allowed, need to return error
       if (!user) {
         return res.status(401).json({ message: 'Unauthorized' });
       }
-
-      console.log('user.role', user.role);
-      console.log('roles', roles);
       if (!roles.includes(user.role)) {
         return res.status(403).json({ message: 'Access denied' });
       }
 
       return next();
+    } catch (error) {
+      return next(error);
+    }
+  },
+
+  checkSession: (req: Request, res: Response) => {
+    if ((req.session as ISession).userId) {
+      return res.status(200).json({ message: 'Session active' });
+    }
+
+    return res.status(401).json({ message: 'Session expired' });
+  },
+
+  verifyPassword: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return res.status(400).json({ message: 'Email and password are required' });
+      }
+
+      const user = await UserModel.findOne({ email });
+      if (!user) {
+        // Avoid exposing whether email is registered
+        return res.status(400).json({ message: 'Invalid email or password' });
+      }
+
+      const isValidPassword = await argon2.verify(user.password, password);
+      if (!isValidPassword) {
+        return res.status(400).json({ message: 'Invalid email or password' });
+      }
+
+      return res.status(200).json({ isValidPassword: true });
+    } catch (error) {
+      return next(error);
+    }
+  },
+
+  changePassword: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { userId } = req.session as ISession;
+      const { password } = req.body;
+      if (!password) {
+        return res.status(400).json({ message: 'Password is required' });
+      }
+
+      const hashedPassword = await argon2.hash(password);
+      await UserModel.findByIdAndUpdate(userId, { password: hashedPassword });
+
+      return res.status(200).json({ message: 'Password changed successfully' });
     } catch (error) {
       return next(error);
     }

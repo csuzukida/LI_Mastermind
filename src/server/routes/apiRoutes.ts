@@ -1,17 +1,23 @@
 import express, { Request, Response } from 'express';
-import { dataController } from '../controllers';
+import { authController, dataController } from '../controllers';
+import { query } from 'express-validator';
 import { userRouter } from '../routes';
+import { validationErrorHandler } from '../utils/validationErrorHandler';
 
 const apiRouter = express.Router();
 
 // data routes
 apiRouter.get(
   '/random-numbers/',
-  dataController.getRandomNumbers,
-  (req: Request, res: Response) => {
-    res.status(200).json(res.locals.randomNumbersArray);
-  }
+  query('difficulty').isInt({ min: 3, max: 10 }),
+  query('min').isInt({ min: 0, max: 9 }),
+  query('max').isInt({ min: 1, max: 9 }),
+  validationErrorHandler,
+  dataController.getRandomNumbers
 );
+
+// auth routes
+apiRouter.get('/auth/check-session', authController.checkSession);
 
 // user routes
 apiRouter.use('/users', userRouter);
