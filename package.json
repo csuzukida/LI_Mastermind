@@ -10,6 +10,7 @@
     "build:server": "npm run clean && tsc -p tsconfig.server.json",
     "build": "npm run build:client && npm run build:server",
     "docker:build": "docker build -t li_mastermind .",
+    "docker:run": "docker run -p 3000:3000 li_mastermind",
     "clean": "rimraf dist/server dist/types",
     "dev": "concurrently \"webpack serve --mode development\" \"cross-env NODE_ENV=development npx nodemon\"",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
