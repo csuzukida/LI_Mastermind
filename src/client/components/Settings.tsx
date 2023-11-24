@@ -76,8 +76,8 @@ const Settings = () => {
         <Logo />
       </Box>
       <br />
-      <Typography>Number of digits in combination: </Typography>
       <Box>
+        <Typography>Number of digits in combination: </Typography>
         <Slider
           value={localNumDigits}
           min={3}
@@ -99,7 +99,7 @@ const Settings = () => {
             setLocalMaxGuesses(value as number);
           }}
         />
-        <Typography>Minimum value of a single digit in the combination:</Typography>
+        <Typography>Smallest value of any single digit in the combination:</Typography>
         <Slider
           value={localMinValue}
           min={0}
@@ -110,7 +110,7 @@ const Settings = () => {
             setLocalMinValue(value as number);
           }}
         />
-        <Typography>Maximum value of a single digit in the combination: </Typography>
+        <Typography>Highest value of any single digit in the combination: </Typography>
         <Slider
           value={localMaxValue}
           min={1}
