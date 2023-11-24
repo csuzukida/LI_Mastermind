@@ -2,25 +2,24 @@
 
 # Table of Contents
 
-- [Play on the web](#play-on-the-web)
-- [Setup and Run locally](#run-locally)
+- [Play on the Web](#play-on-the-web-🌎)
+- [Setup and Run locally](#setup-and-run-locally)
 - [Environment Variables](#environment-variables)
-- [Running Tests](#running-tests)
-- [Features](#features)
-- [Feature Roadmap](#feature-roadmap)
-- [Dev Roadmap](#dev-roadmap)
+- [Running Tests](#running-tests-🧪)
+- [API Reference](#api-reference-📓)
+- [Features](#features-🏁)
+- [Feature Roadmap](#feature-roadmap-🔜)
+- [Dev Roadmap](#dev-roadmap-🔜)
 - [Demo](#demo)
 - [Screenshots](#screenshots)
-- [API Reference](#api-reference)
-- [Tech Stack](#tech-stack)
-- [Lessons Learned](#lessons-learned)
+- **[Lessons Learned](#lessons-learned)** ⬅️⬅️⬅️⬅️ **_Check me out_**!
 - [FAQs](#faq)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgements)
 
-## Play on the Web
+## Play on the Web 🌎
 
-Visit [https://li-mastermind.fly.dev](https://li-mastermind.fly.dev) to see a deployed version of this app!
+🚀🚀 **Visit** [https://li-mastermind.fly.dev](https://li-mastermind.fly.dev) **to see a deployed version of this app!** 🚀🚀
 
 ## Setup and Run Locally
 
@@ -91,7 +90,7 @@ Build the project:
   $ npm run build
 ```
 
-Lastly, start the server and navigate to [http://localhost:8080](http://localhost:8080/) to play the game!
+Lastly, start the server and navigate to [http://localhost:3000](http://localhost:3000/) to play the game!
 ​
 
 ```bash
@@ -100,18 +99,21 @@ Lastly, start the server and navigate to [http://localhost:8080](http://localhos
 
 ## Environment Variables
 
-To run this project locally with full features, you will need to add the following environment variables to a `.env` file:
+To run this project locally, you will need to add the following environment variables to a `.env` file:
 
 ```bash
-  MONGO_URI='paste your MongoDB URI here'
-  SESSION_SECRET='create your secret key here'
+  #replace with your string, but do not wrap in quotes!
+  MONGO_URI=mongodb:// or mongodb+srv://
+
+  #create a secret key
+  SESSION_SECRET=your-secret-key
 ```
 
-By entering a `MONGO_URI`, you will be able to connect to a MongoDB instance you provide either locally by installing [MongoDB](https://www.mongodb.com/docs/manual/installation/) or create a MongoDB instance in the cloud using [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) (this is free and does not require a credit card, but it does require creating an account with MongoDB).
+By entering a `MONGO_URI`, you will be able to connect to a MongoDB instance you provide either locally by installing [MongoDB](https://www.mongodb.com/docs/manual/installation/) or creating a MongoDB instance in the cloud using [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) (this is free and does not require a credit card, but it does require creating an account with MongoDB). Once you have a connection string, paste that into your `.env` file, but do not wrap the values in quotes!
 
-If you just want to play the game but not create an account or store session data, feel free to skip this step!
+For the `SESSION_SECRET`, you can set this value to whatever you would like since you are only running this locally, such as `this-is-a-session-secret`, however you can choose to use any long, randomly generated string.
 
-## Running Tests
+## Running Tests 🧪
 
 To run tests, run the following command:
 
@@ -121,36 +123,42 @@ To run tests, run the following command:
 
 You can find the tests contained in the `__tests__` directory in the root of the project.
 
-## Features
+## API Reference 📓
+
+**Checkout the [API & Design README](/readme/design-api-reference.md) for more info on:**
+
+- UI Mockup
+- Database Schema Design
+- API reference
+
+## Features 🏁
 
 - Create an account with email and password
 - Sign in to enable sessions and sign out to destroy your session
+- Change your password and/or delete your account
 - Change and save game settings
-  - Change the number of digits in the combination
-  - Change the number of guesses you have available
+  - Change the number of digits in the combinatio (3-10)
+  - Change the range of numbers for each digit (0-9)
+  - Change the number of guesses you have available (up to 20)
   - Enable timer mode
   - Change the amount of time you have
-- View your previous guess history when playing a game
 - See immediate feedback on your guess
+- View your previous guess history
 
-## Feature Roadmap
+## Feature Roadmap 🔜
 
-- Adding a Sign in with `LinkedIn` option
-- Allow users to delete their account
-- Storing settings and game state so you can come back to a previous game with your settings saved even when you close the tab
-- Toggle the guess history for more of a challenge
-- Add friends and compete in a local and global leaderboard
+- [] Storing settings and game state so you can come back to a previous game with your settings saved even when you close the tab
+- [] Toggle the guess history for more of a challenge
+- [] Add friends and compete in a local and global leaderboard
+- [] Adding a Sign in with `LinkedIn` option
 
-## Dev Roadmap
+## Dev Roadmap 🔜
 
-- Implement file based logging using `Winston`
-- Create more robust testing, including end-to-end testing using `Cypress` and `React Testing Library`
-- `Dockerize` the application for a more consistent dev environment
-- Setup a CI/CD pipeline with automated testing using `Github Actions`
-- Implement caching for game state using Redis
-- Deploy the application so users can simply click a link and play the game
-- Implement a load balancer and auto-scaler
-- Allows other devs to create their own visual wrapper around the core game logic via the API
+- [] Implement file based logging
+- [] Create more robust testing, including end-to-end testing using `Cypress` and `React Testing Library`
+- [] Setup a CI/CD pipeline with automated testing using `Github Actions`
+- [] Implement caching for game state and leaderboard using Redis
+- [] Allows other devs to create their own visual wrapper around the core game logic via the API
 
 ## Demo
 
@@ -169,130 +177,15 @@ You can find the tests contained in the `__tests__` directory in the root of the
 ![Settings Screenshot](/assets/settings_screenshot.png)
 ![Signin Screenshot](/assets/signin_screenshot.png)
 
-## API Reference
-
-### Data
-
-#### Get random numbers
-
-```http
-  GET /api/random-numbers?difficulty={difficulty}&min={min}&max={max}
-```
-
-| Parameter    | Type  | Description                                                            |
-| :----------- | :---- | :--------------------------------------------------------------------- |
-| `difficulty` | `int` | number of digits in combination (lowest is 3, max is 10, default is 4) |
-| `min`        | `int` | lower threshold (inclusive) of digit generated (lowest is 0)           |
-| `max`        | `int` | upper threshold (inclusive) of digit generated (highest is 9)          |
-
-Example call:
-
-```javascript
-/api/random-numbers?difficulty=4&min=0&max=9
-```
-
-### Users
-
-#### Get all users
-
-```http
-  GET /api/users/all-users
-```
-
-| Parameter | Type  | Description                                            |
-| :-------- | :---- | :----------------------------------------------------- |
-| `N/A`     | `N/A` | Fetches all users (requires admin level authorization) |
-
-#### Get specific user
-
-```http
-  GET /api/users/:id
-```
-
-| Parameter | Type     | Description                                                                    |
-| :-------- | :------- | :----------------------------------------------------------------------------- |
-| `id`      | `string` | **Required**. Id of user to fetch (requires admin or user level authorization) |
-
-#### Create user
-
-```http
-  POST /api/users/signup
-```
-
-**_JSON Request Body:_**
-| Parameter | Type | Description |
-| :--------- | :------- | :---------------------------------------- |
-| `email` | `string` | Example: `"email": "example@example.com"` |
-| `password` | `string` | Example: `"password": "examplePassword"` |
-
-#### Login user
-
-```http
-  POST /api/users/login
-```
-
-**_JSON Request Body:_**
-| Parameter | Type | Description |
-| :--------- | :------- | :---------------------------------------- |
-| `email` | `string` | Example: `"email": "example@example.com"` |
-| `password` | `string` | Example: `"password": "examplePassword"` |
-
-#### Logout user
-
-```http
-  POST /api/users/logout
-```
-
-| Parameter | Type  | Description                                                                   |
-| :-------- | :---- | :---------------------------------------------------------------------------- |
-| `N/A`     | `N/A` | Requires user to be logged in and have session cookie or will return an error |
-
-#### Delete specific user
-
-```http
-  DELETE /api/users/:id
-```
-
-| Parameter | Type     | Description                                                       |
-| :-------- | :------- | :---------------------------------------------------------------- |
-| `id`      | `string` | **Required**. Id of user to delete (requires admin authorization) |
-
-## Tech Stack
-
-**Client:** React, React Hook Form, React Router, MUI
-​
-
-**Server:** Node, Express, MongoDB
-
 ## Lessons Learned
 
-### Project Setup and Ideation (Day 1)
+### 📚 Interested in my week long journey? 📚
 
-This was the initial phase which involved planning, determing the initial file structure, what my tech stack was going to be, and how I wanted to approach UI, database, and API design. After I had a basic layout and how I wanted to approach the design, I moved onto defining an MVP (minimum viable product) and stretch features that felt attainable within the confines of a one week sprint.
+**_Click [here](/readme/lessons-learned.md) to read more about my journey, the technical challenges I encountered, and how I overcame them!_**
 
-### Challenges When Working on MVP (Day 1 - 2)
+### 🔬 Interested in the scope and stretch features? 🔬
 
-When tackling the MVP, I focused on getting the core game logic to work first. In order to do so, I focused on how to implement the ability to take an array of numbers (guess) and compare it to another array of numbers (answer) and have it return the number of correct digits as well as the number of correct digits in the correct place. My downfall here was misunderstanding the algorithm requirements because I was initially returning the number of correct digits in the correct place and the number of "almost correct" digits that NOT in the correct place. It was a slight enough difference that I did not catch this until much later in the development process and would ultimately have to revisit the logic again later.
-
-By the end of the first day, I had a basic UI in React and the game logic working (or so I thought). Most of this day was spent getting Webpack and TypeScript working together.
-
-### Testing & Troubles (Day 3)
-
-At this point, the UI was more polished and I had achieved some of the stretch features I had defined such as integrating a MongoDB database and allowing the users to sign in and out. This also came with managing basic sessions. I was also able to implement game settings which allows the user to select a variable difficulty based off of the number of digits in the combination, the allowable digits (0-9) in the combination, the number of guesses, and a timer.
-
-Since the MVP was done, I decided to move onto basic testing. This is where I ran into a slew of problems...
-
-My project configurations, while allowing a solid dev and prod environment, were very hard to configure and rigid. Just trying to add Jest for testing became a half-day headache. At this point, I decided it was easier to simplify my configs to allow for better developer experience (for myself, but hey, good practice is good practice!). Managing that, I was able to get Jest to work. I also had to test all the functionality of my app manually once more to make sure I hadn't broken anything along the way.
-
-I actually caught the game logic error I previously mentioned when I setup my Jest tests, because I was getting the unexpected results back. I was able to go back and refactor the game logic by using two frequency maps, one for the guess array and answer array and do a comparison of the frequency values of each number.
-
-### Thinking about Deployment (Day 4)
-
-Now that the app was shaping up, it was time to think about deploying the app to make it useable without installation or having to worry about the "it works on my machine" type issues. There were two main areas I wanted to tackle now before heading into stretch feature territory: containerizing the app via Docker and deploying it. Luckily, I managed to find ([fly.io](https://fly.io/)), which had a really nice way of integrating both and provided some really nice CLI commands to make deploying easy. The tooling was the easiest aspect of this, as I realized there were some issues in my project setup that required some heavy reworking.
-
-This mostly involved modifying my server file to make the host be available on '0.0.0.0' instead of just 'localhost' or '127.0.0.1'. I was getting some mishandled promises when trying to start the server, so I went back and refactored my logic to be more simple and to add better error handling. After I get the host situation resolved, I was running into issues whitelisting my MongoDB database's IP address.
-
-Once that was all resolved, I had to tackle one last problem, which was that my environment variables were not being set correctly insie the deployment. I kept trying to set them over and over, but eventually it was resolved by manually clearing them out and setting them one last time. Finally, the app was deployed and live!
+**_Click [here](/readme/mvp.md) for the MVP goals and [here](/readme/stretch-features.md) for a list of the stretch features I had defined!_**
 
 ## FAQ
 
@@ -312,7 +205,12 @@ LinkedIn [@chris-suzukida](https://www.linkedin.com/in/chris-suzukida/)
 
 ## Acknowledgements
 
-- Special thanks to the LinkedIn REACH program for this opportunity
-- Extra special thank you to my interviewers who will be reviewing this project, you are all rockstars!
-- README template from [readme.so](https://readme.so/)
-- Number input component adapted from Ahmed Hamed's `React Verification Code Input` from this [codesandbox.io](https://codesandbox.io/s/react-verification-code-input-kvthq)
+```
+A very special thanks to the LinkedIn REACH program for this opportunity!
+
+Extra special THANK_YOU to the INTERVIEWERS and anybody else who will be reviewing this project, you are all ROCKSTARS! ⭐️✨
+
+- README template from https://readme.so/
+
+- Number input component adapted from Ahmed Hamed's 'React Verification Code Input' from https://codesandbox.io/s/react-verification-code-input-kvthq
+```
