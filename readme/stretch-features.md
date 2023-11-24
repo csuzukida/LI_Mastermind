@@ -13,6 +13,6 @@
 - [ ] Implement caching for game state and/or leaderboards
 - [ ] Allow users to sign in with their LinkedIn account
 - [ ] Implement logging (Winston and Morgan)
-- [ ] Include more robust testing
+- [x] Include more robust testing
 - [ ] Setup a CI/CD pipeline using Github Actions
 - [ ] Implement a way for other developers to create their own game via API
