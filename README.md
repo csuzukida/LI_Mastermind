@@ -1,4 +1,4 @@
-![Logo](/assets/mastermind_logo.png)​
+![Logo](/assets/mastermind_logo_transparent.png)​
 
 # Table of Contents
 
