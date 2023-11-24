@@ -79,9 +79,8 @@ const userController = {
       }
 
       const user = await UserModel.findById(id);
-      res.locals.user = user;
 
-      return next();
+      return res.status(200).json(user);
     } catch (error) {
       return next(error);
     }
