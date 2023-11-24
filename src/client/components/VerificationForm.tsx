@@ -40,29 +40,36 @@ const VerificationForm = ({ title, length, onFormSubmit }: VerificationFormProps
   const [isValid, setIsValid] = useState(true);
   const [code, setCode] = useState<string[]>(Array(length).fill(''));
 
-  const { shouldShowTimer } = useContext(GameContext);
-
+  // need to use ref to access the form element
   const formRef = useRef<HTMLFormElement>(null);
 
+  // determine if the timer setting is enabled
+  const { shouldShowTimer } = useContext(GameContext);
   useEffect(() => {}, [shouldShowTimer]);
 
+  // useCallback caches function def between re-renders
   const update = useCallback((index: number, val: string) => {
     return setCode((prevState) => {
+      // make a copy of the state array
       const slice = prevState.slice();
+      // update the value at the index
       slice[index] = val;
+      // return the updated array
       return slice;
     });
   }, []);
 
   function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    // grabs the index but need to type assert as a string for parseInt
     const index = parseInt(e.currentTarget.dataset.index as string);
     const form = formRef.current;
-
     if (isNaN(index) || form === null) return;
 
+    // grab the prev and next input elements
     const prevInput: InputOrNull = form.querySelector(`.input-${index - 1}`);
     const nextInput: InputOrNull = form.querySelector(`.input-${index + 1}`);
 
+    // handle backspace, arrow left, and arrow right
     switch (e.key) {
       case 'Backspace':
         if (code[index]) update(index, '');
@@ -78,18 +85,27 @@ const VerificationForm = ({ title, length, onFormSubmit }: VerificationFormProps
     }
   }
 
+  // handle input change
   function handleChange(e: FormEvent<HTMLInputElement>) {
     const value = e.currentTarget.value;
+    // need to type assert as a string for parseInt
     const index = parseInt(e.currentTarget.dataset.index as string);
     const form = formRef.current;
     if (isNaN(index) || form === null) return;
 
+    // grab the next input element
     let nextIndex = index + 1;
     let nextInput: InputOrNull = form.querySelector(`.input-${nextIndex}`);
 
+    // call the cached update function with the index and value
     update(index, value[0] || '');
-    if (value.length === 1) nextInput?.focus();
-    else if (index < length - 1) {
+
+    // only focus on the next input if the value is not empty
+    if (value.length === 1) {
+      nextInput?.focus();
+      // handle the case where the user pastes a value
+    } else if (index < length - 1) {
+      // split the value into an array and update the state
       const split = value.slice(index + 1, length).split('');
       split.forEach((val) => {
         update(nextIndex, val);

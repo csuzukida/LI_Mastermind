@@ -1,3 +1,4 @@
+// extends Error class with a statusCode for use in global error handler
 class CustomError extends Error {
   statusCode: number;
 

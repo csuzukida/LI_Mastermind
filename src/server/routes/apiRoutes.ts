@@ -9,7 +9,7 @@ const apiRouter = express.Router();
 // data routes
 apiRouter.get(
   '/random-numbers/',
-  query('difficulty').isInt({ min: 3, max: 10 }),
+  query('length').isInt({ min: 3, max: 10 }),
   query('min').isInt({ min: 0, max: 9 }),
   query('max').isInt({ min: 1, max: 9 }),
   validationErrorHandler,

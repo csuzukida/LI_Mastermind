@@ -51,12 +51,12 @@
 #### Get random numbers
 
 ```http
-  GET /api/random-numbers?difficulty={difficulty}&min={min}&max={max}
+  GET /api/random-numbers?length={length}&min={min}&max={max}
 ```
 
 | URL Parameter | Type  | Description                               | Returns                                                                                |
 | :------------ | :---- | :---------------------------------------- | -------------------------------------------------------------------------------------- |
-| `difficulty`  | `int` | number of digits in combination           | ValidationError: `res.status(400).json({ message: 'Min cannot be greater than max' })` |
+| `length`      | `int` | number of digits in combination           | ValidationError: `res.status(400).json({ message: 'Min cannot be greater than max' })` |
 | `min`         | `int` | lower threshold (inclusive), lowest is 0  | Success: `res.status(200).json(randomNumbersArray)` as `Array<number>`                 |
 | `max`         | `int` | upper threshold (inclusive), highest is 9 |                                                                                        |
 
