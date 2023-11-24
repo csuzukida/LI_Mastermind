@@ -102,10 +102,15 @@ const Account = () => {
 
   const handleDeleteAccountClick = async () => {
     try {
+      // prompt user if they are sure they want to delete their account
+      const confirmDelete = window.confirm('Are you sure you want to delete your account?');
+      if (!confirmDelete) return;
+
       const response = await axios.delete('/api/users/delete-account');
-      if (response.status === 204) {
+
+      if (response.status === 200) {
         alert('Account deleted successfully!');
-        navigate(-1);
+        window.location.reload();
       }
     } catch (error) {
       console.error('Something went wrong while deleting the account');
@@ -171,6 +176,7 @@ const Account = () => {
           <Button onClick={() => navigate(-1)}>Home</Button>
         </Box>
       </form>
+      <br />
       <Button onClick={handleDeleteAccountClick}>Delete Account</Button>
     </Box>
   );
