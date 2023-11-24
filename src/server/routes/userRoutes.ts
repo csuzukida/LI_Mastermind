@@ -28,10 +28,16 @@ userRouter.get(
 );
 
 userRouter.delete(
+  '/delete-account',
+  authController.isAuthenticated,
+  userController.deleteOwnAccount
+);
+userRouter.delete(
   '/:id',
   param('id').isMongoId(),
   validationErrorHandler,
   authController.isAuthenticated,
+  authController.checkRole(['admin']),
   userController.deleteUser
 );
 

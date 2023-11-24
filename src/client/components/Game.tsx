@@ -32,7 +32,7 @@ const Game = () => {
     const getRandomNumbers = async () => {
       try {
         const response = await axios.get(
-          `/api/random-numbers/?difficulty=${numDigits}&min=${minValue}&max=${maxValue}`
+          `/api/random-numbers/?length=${numDigits}&min=${minValue}&max=${maxValue}`
         );
         const randomNumbers: number[] = response.data;
         // logging for ease of code demo purposes
@@ -55,12 +55,14 @@ const Game = () => {
 
   const checkGameOver = (userGuess: string) => {
     setGuessCount(guessCount + 1);
+
     // check if user guessed correctly
     if (userGuess === answer.join('')) {
       navigate('/game-over', {
         state: { win: true, message: "Great job, you're a masterful code breaker!" },
       });
     }
+
     // check if user ran out of guesses
     if (guessCount + 1 >= maxGuesses) {
       navigate('/game-over', {
@@ -80,7 +82,6 @@ const Game = () => {
     if (localCorrectCount === 0 && localCorrectLocationCount === 0) {
       setNoneCorrect(true); // display message if all incorrect
     }
-
     // add user guess to guess history and update correct counts in state
     setGuessHistory((prevState) => {
       return [...prevState, [userGuess, localCorrectCount, localCorrectLocationCount]];

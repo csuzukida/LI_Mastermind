@@ -1,3 +1,4 @@
+// exports marks for MUI sliders in Settings.tsx
 export const digitSliderMarks = [
   {
     value: 3,

@@ -10,8 +10,6 @@ import { Logo } from '../components';
 import { GameContext } from '../contexts';
 import { boxStyle } from '../utils';
 
-// TODO: Add forgot password link
-
 const signinBoxStyle = {
   ...boxStyle,
   justifyContent: 'center',
@@ -37,14 +35,12 @@ const Signin = () => {
       password: '',
     },
   });
-
   const { setIsLoggedIn } = useContext(GameContext);
 
   const onSubmit: SubmitHandler<SigninInput> = async (formData) => {
     try {
       await axios.post('/api/users/login', formData);
       setIsLoggedIn(true);
-      // TODO: Stylize this alert or replace it with a toast
       alert('Sign in successful! Navigating back to the home page.');
       navigate('/');
     } catch (error) {
@@ -55,7 +51,7 @@ const Signin = () => {
           message: 'Email not found or password is incorrect',
         });
       }
-      if (axios.isAxiosError(error) && error.response && error.response.status === 404) {
+      if (axios.isAxiosError(error)) {
         setError('password', {
           type: 'manual',
           message: 'Email not found or password is incorrect',
