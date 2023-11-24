@@ -28,7 +28,7 @@
 | `user`       | ObjectId | true       | no         | false    | `ref: 'User'`           |
 | `startTime`  | Date     | true       | `Date.now` | false    |                         |
 | `endTime`    | Date     | false      | no         | false    |                         |
-| `score`      | Number   | false      | `Date.now` | false    |                         |
+| `score`      | Number   | false      | 0          | false    |                         |
 | `moves`      | [String] | false      | no         | no       |                         |
 | `gameResult` | String   | false      | no         | no       | `Enum: ['win', 'loss']` |
 
