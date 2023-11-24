@@ -38,7 +38,7 @@
 
 ## Testing
 
-- [ ] Setup Jest, SuperTest, React Testing Library, and Cypress
+- [x] Setup Jest, SuperTest, React Testing Library, and Cypress
 - [x] Write basic tests for frontend and backend
 
 ## Documentation:

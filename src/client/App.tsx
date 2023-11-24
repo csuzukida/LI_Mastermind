@@ -33,7 +33,15 @@ const App = () => {
           setIsLoggedIn(true);
         }
       } catch (error) {
-        console.error(error);
+        if (axios.isAxiosError(error)) {
+          if (error.response && error.response.status === 401) {
+            setIsLoggedIn(false);
+          } else {
+            console.error(`An error occurred: ${error.message}`);
+          }
+        } else {
+          console.error(`An error occurred: ${error}`);
+        }
       }
     };
 
