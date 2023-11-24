@@ -13,10 +13,6 @@ import MongoStore from 'connect-mongo';
 import apiRoutes from './routes/apiRoutes';
 import CustomError from './utils/CustomError';
 
-// TODO: Implement file logging with winston
-// TODO: Implement helmet for security
-// TODO: Implement compression for performance
-
 const app: Express = express();
 const MODE = process.env.NODE_ENV || 'development';
 const HOST_NAME = '0.0.0.0';
@@ -24,29 +20,28 @@ const PORT = 3000;
 const SESSION_SECRET = process.env.SESSION_SECRET || '';
 const URI = process.env.DATABASE_URL || 'mongodb://localhost:27017';
 const limiter = rateLimit({
-  // windowMs: 15 * 60 * 1000, // 15 minutes
-  windowMs: 5000,
-  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 300, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
 let server: http.Server | null = null;
 
-// Start server function
+// wrap server in start and stop functions to handle graceful shutdown and testing
 export const startServer = async (): Promise<http.Server | undefined> => {
   if (server) {
     console.log('Server already started');
     return;
   }
 
-  // Connect to MongoDB here
+  // Connect to MongoDB
   try {
     console.log('Connecting to MongoDB...');
     await mongoose.connect(URI, {
       dbName: 'linkedin-mastermind',
     });
-    console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB ✅');
   } catch (error) {
     console.error(`Failed to connect to MongoDB: ${error}`);
     process.exit(1);
@@ -57,7 +52,6 @@ export const startServer = async (): Promise<http.Server | undefined> => {
   });
 };
 
-// Stop server function
 export const stopServer = async (): Promise<void> => {
   if (server) {
     server.close((err) => {
@@ -65,7 +59,7 @@ export const stopServer = async (): Promise<void> => {
         console.error(`Error closing server: ${err}`);
         return;
       }
-      console.log('Sever closed');
+      console.log('Sever closed successfully 🚪');
       server = null;
     });
   }
@@ -73,9 +67,9 @@ export const stopServer = async (): Promise<void> => {
   try {
     console.log('Disconnecting from MongoDB...');
     await mongoose.disconnect();
-    console.log('Disconnected from MongoDB');
+    console.log('Disconnected from MongoDB ⛔️');
   } catch (error) {
-    console.log(`Failed to disconnect from MongoDB: ${error}`);
+    console.log(`❌ Failed to disconnect from MongoDB: ${error}`);
   }
 };
 
@@ -112,6 +106,13 @@ if (MODE === 'production') {
   app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!');
   });
+
+  app.get('/test-custom-error', (req: Request, res: Response, next: NextFunction) => {
+    // create a custom error with an arbitrary status code
+    const error = new CustomError('Test error', 418);
+    // pass the error to the next middleware
+    return next(error);
+  });
 } else {
   startServer();
 }
@@ -128,9 +129,9 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
 });
 
 // helper function for graceful shutdown
-const shutdown = (sig: string) => {
+const shutdown = async (sig: string) => {
   console.log(`Received ${sig}. Gracefully shutting server down...`);
-  stopServer();
+  await stopServer();
   console.log('Server shutdown complete 👋');
   process.exit(0);
 };

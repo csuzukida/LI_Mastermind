@@ -35,19 +35,17 @@ const Signup = () => {
       password: '',
     },
   });
-
   const { setIsLoggedIn } = useContext(GameContext);
 
   const onSubmit: SubmitHandler<SignupInput> = async (formData) => {
     try {
       await axios.post('/api/users/signup', formData);
       setIsLoggedIn(true);
-      // TODO: Stylize this alert or replace it with a toast
       alert('Signup successful! Navigating back to the home page.');
       navigate('/');
     } catch (error) {
       console.error(error);
-      if (axios.isAxiosError(error) && error.response && error.response.status === 404) {
+      if (axios.isAxiosError(error)) {
         setError('password', {
           type: 'manual',
           message: 'Something went wrong, please try again later',

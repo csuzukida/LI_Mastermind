@@ -8,7 +8,6 @@ const authController = {
     if ((req.session as ISession).userId) {
       return next();
     }
-
     res.status(401).json({ message: 'Unauthorized' });
   },
 
@@ -16,7 +15,6 @@ const authController = {
     try {
       const { userId } = req.session as ISession;
       const user = await UserModel.findById(userId);
-
       // if there's no user or user role is not allowed, need to return error
       if (!user) {
         return res.status(401).json({ message: 'Unauthorized' });
@@ -24,7 +22,6 @@ const authController = {
       if (!roles.includes(user.role)) {
         return res.status(403).json({ message: 'Access denied' });
       }
-
       return next();
     } catch (error) {
       return next(error);
@@ -35,7 +32,6 @@ const authController = {
     if ((req.session as ISession).userId) {
       return res.status(200).json({ message: 'Session active' });
     }
-
     return res.status(401).json({ message: 'Session expired' });
   },
 

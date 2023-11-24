@@ -1,3 +1,4 @@
+// template style for the @mui/material/Box component
 export const boxStyle = {
   maxWidth: '600px',
   width: '600px',
